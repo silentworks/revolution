@@ -39,6 +39,8 @@ if (!defined('MODX_CORE_PATH')) {
 }
 require MODX_CORE_PATH . 'vendor/autoload.php';
 
+use Aura\Di\ContainerBuilder;
+use Interop\Container\ContainerInterface;
 use xPDO\xPDO;
 use xPDO\xPDOException;
 use xPDO\Cache\xPDOCacheManager;
@@ -285,6 +287,11 @@ class modX extends xPDO {
     public $documentOutput= null;
 
     /**
+     * @var \Aura\Di\Container
+     */
+    private $container;
+
+    /**
      * Harden the environment against common security flaws.
      *
      * @static
@@ -436,6 +443,7 @@ class modX extends xPDO {
             if (!is_null($debug) && $debug !== '') {
                 $this->setDebug($debug);
             }
+            $this->container = $this->initServicesContainer($this->createServiceContainer());
             $this->setPackage('modx', MODX_CORE_PATH . 'model/');
             $this->loadClass('modAccess');
             $this->loadClass('modAccessibleObject');
@@ -452,6 +460,47 @@ class modX extends xPDO {
             $this->sendError('unavailable', array('error_message' => $e->getMessage()));
         }
     }
+
+    private function createServiceContainer()
+    {
+        $builder = new ContainerBuilder();
+        return $builder->newInstance();
+    }
+
+    private function initServicesContainer(\Aura\Di\Container $container)
+    {
+        $container->set('error.modErrorHandler', $container->newInstance('MODX\Handlers\ErrorHandler', [
+            'modx' => $this
+        ]));
+
+        return $container;
+    }
+
+    /**
+     * Load and return a named service class instance.
+     *
+     * @param string $name The variable name of the instance.
+     * @param string $class The service class name.
+     * @param string $path An optional root path to search for the class.
+     * @param array $params An array of optional params to pass to the service
+     * class constructor.
+     * @return object|null A reference to the service class instance or null if
+     * it could not be loaded.
+     */
+    public function &getService(
+      $name,
+      $class = '',
+      $path = '',
+      $params = array()
+    ) {
+        try {
+            $service = $this->container->get($name);
+        } catch (\Aura\Di\Exception\ServiceNotFound $e) {
+            $service = parent::getService($name, $class, $path, $params);
+        }
+        return $service;
+    }
+
 
     /**
      * Load the modX configuration when creating an instance of modX.
@@ -2374,13 +2423,10 @@ class modX extends xPDO {
     protected function _initErrorHandler($options = null) {
         if ($this->errorHandler == null || !is_object($this->errorHandler)) {
             if ($ehClass = $this->getOption('error_handler_class', $options, 'modErrorHandler', true)) {
-                if ($ehClass= $this->loadClass($ehClass, '', false, true)) {
-                    if ($this->errorHandler= new $ehClass($this)) {
-                        $result= set_error_handler(array ($this->errorHandler, 'handleError'), $this->getOption('error_handler_types', $options, error_reporting(), true));
-                        if ($result === false) {
-                            $this->log(modX::LOG_LEVEL_ERROR, 'Could not set error handler.  Make sure your class has a function called handleError(). Result: ' . print_r($result, true));
-                        }
-                    }
+                $this->errorHandler = $this->getService($ehClass);
+                $result= set_error_handler(array ($this->errorHandler, 'handleError'), $this->getOption('error_handler_types', $options, error_reporting(), true));
+                if ($result === false) {
+                    $this->log(modX::LOG_LEVEL_ERROR, 'Could not set error handler.  Make sure your class has a function called handleError(). Result: ' . print_r($result, true));
                 }
             }
         }

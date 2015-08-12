@@ -43,9 +43,13 @@
     },
     "require": {
         "php": ">=5.3",
-        "xpdo/xpdo": "^3.0@dev"
+        "xpdo/xpdo": "^3.0@dev",
+        "aura/di": "^3.0.0-beta1"
     },
     "autoload": {
-        "classmap": ["core/xpdo/"]
+        "classmap": ["core/xpdo/"],
+        "psr-4": {
+            "MODX\\": "src/"
+        }
     }
 }
