@@ -1,0 +1,25 @@
+{
+    "name": "modxcms/installer",
+    "description": "CMS setup system",
+    "type": "modxcms",
+    "license": "GPL3",
+    "authors": [
+        {
+            "name": "Andrew Smith",
+            "email": "a.smith@silentworks.co.uk"
+        }
+    ],
+    "require": {
+        "slim/slim": "^3.0@dev",
+        "league/plates": "^3.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "MODX\\Installer\\": "src/"
+        },
+        "files": []
+    },
+    "scripts": {
+        "cleanup": "sh post-setup.sh"
+    }
+}
