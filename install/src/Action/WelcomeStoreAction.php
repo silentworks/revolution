@@ -7,7 +7,7 @@ use MODX\Installer\Util;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class WelcomeAction
+class WelcomeStoreAction
 {
     /**
      * @var \MODX\Installer\HttpResponder
@@ -32,9 +32,7 @@ class WelcomeAction
 
     public function __invoke(Request $request, Response $response, $args = null)
     {
-        return $this->responder->render($response, 'welcome', [
-            'config_key' => $request->getParam('config_key', MODX_CONFIG_KEY),
-            'writableError' => !$this->util->isSetupConfigWritable(),
-        ]);
+        $this->util->updateSetupConfigKey($request->getParam('config_key', 'config'));
+        return $this->responder->redirectTo($response, 'options');
     }
 }

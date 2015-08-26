@@ -15,9 +15,12 @@ include MODX_SETUP_PATH . 'config.core.php';
 $app = new Slim\App([
     'settings' => [
         'template.path' => __DIR__ . '/templates',
-        'lexicon' => [
-            'lexiconPath' => __DIR__ . '/lang/'
-        ]
+        'asset.path' => __DIR__ . '/assets/',
+        'modx' => [
+          'corePath' => MODX_CORE_PATH,
+          'setupPath' => MODX_SETUP_PATH,
+          'lexiconPath' => __DIR__ . '/lang/',
+        ],
     ]
 ]);
 
@@ -42,9 +45,19 @@ $engine->addData([
   'MODX_SETUP_KEY' => MODX_SETUP_KEY
 ]);
 
-$app->get('/', MODX\Installer\Action\LanguageAction::class);
-$app->post('/', MODX\Installer\Action\LanguageStoreAction::class);
+$app->get('/', MODX\Installer\Action\LanguageAction::class)
+  ->setName('language');
+$app->post('/', MODX\Installer\Action\LanguageStoreAction::class)
+  ->setName('language.store');
 
-$app->get('/welcome', MODX\Installer\Action\WelcomeAction::class);
+$app->get('/welcome', MODX\Installer\Action\WelcomeAction::class)
+  ->setName('welcome');
+$app->post('/welcome', MODX\Installer\Action\WelcomeStoreAction::class)
+  ->setName('welcome.store');
+
+$app->get('/options', MODX\Installer\Action\OptionsAction::class)
+  ->setName('options');
+$app->post('/options', MODX\Installer\Action\OptionsAction::class)
+  ->setName('options.store');
 
 $app->run();

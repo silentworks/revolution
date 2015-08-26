@@ -41,6 +41,6 @@ class LanguageStoreAction
         $settings = $request->getParsedBody();
         $this->settings->store($settings);
 
-        return $response->withRedirect('/install/welcome');
+        return $this->responder->redirectTo($response, 'welcome');
     }
 }

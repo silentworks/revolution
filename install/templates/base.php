@@ -3,33 +3,18 @@
 <head>
     <title><?=$app_name?> <?=$app_version?> &raquo; <?=$_lang['install']?></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <link rel="stylesheet" type="text/css" media="all" href="assets/css/reset.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="assets/css/text.css" />
-    <link rel="stylesheet" type="text/css" media="all" href="assets/css/960.css" />
+    <link rel="shortcut icon" href="<?=$this->root_path()?>/favicon.ico" />
+    <link rel="stylesheet" type="text/css" media="all" href="<?=$this->root_path()?>/install/assets/css/reset.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="<?=$this->root_path()?>/install/assets/css/text.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="<?=$this->root_path()?>/install/assets/css/960.css" />
 
-    <link rel="stylesheet" href="assets/modx.css" type="text/css" media="screen" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=$this->root_path()?>/install/assets/modx.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="<?=$this->root_path()?>/install/assets/css/print.css" />
 
-    <link rel="stylesheet" href="assets/css/print.css" type="text/css" media="print" />
-
-    <link href="assets/css/style.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="<?=$this->root_path()?>/install/assets/css/style.css" />
     <?php if (! empty($_lang['additional_css'])): ?>
     <style type="text/css"><?=$_lang['additional_css']?></style>
     <?php endif ?>
-    <script type="text/javascript" src="assets/js/ext-core.js"></script>
-    <script type="text/javascript" src="assets/js/modx.setup.js"></script>
-    <!--[if lt IE 7]>
-    <script type="text/javascript" src="assets/js/inc/say.no.to.ie.6.js"></script>
-    <style type="text/css">
-        body {
-            behavior:url("assets/js/inc/csshover2.htc");
-        }
-        .pngfix {
-            behavior:url("assets/js/inc/iepngfix.htc");
-        }
-    </style>
-    <![endif]-->
-
 </head>
 
 <body>

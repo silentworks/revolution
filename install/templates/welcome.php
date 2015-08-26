@@ -1,7 +1,6 @@
 <?php $this->layout('base');  ?>
 
-<script type="text/javascript" src="assets/js/sections/welcome.js"></script>
-<form id="welcome" action="?action=welcome" method="post">
+<form id="welcome" action="<?=$this->path_for('welcome.store')?>" method="post">
     <div>
         <h2><?=$_lang['welcome']?></h2>
         <?=$_lang['welcome_message']?>

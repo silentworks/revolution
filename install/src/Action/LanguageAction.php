@@ -13,6 +13,7 @@ class LanguageAction
      * @var \MODX\Installer\HttpResponder
      */
     private $responder;
+
     /**
      * @var \MODX\Installer\Util
      */
@@ -21,6 +22,7 @@ class LanguageAction
     /**
      * WelcomeAction constructor.
      * @param \MODX\Installer\HttpResponder $responder
+     * @param \MODX\Installer\Util $util
      */
     public function __construct(HttpResponder $responder, Util $util)
     {

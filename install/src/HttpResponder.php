@@ -4,6 +4,7 @@ namespace MODX\Installer;
 
 use League\Plates\Engine;
 use Psr\Http\Message\ResponseInterface;
+use Slim\Interfaces\RouterInterface;
 
 class HttpResponder
 {
@@ -13,12 +14,30 @@ class HttpResponder
     private $engine;
 
     /**
+     * @var \Slim\Interfaces\RouterInterface
+     */
+    private $router;
+
+    /**
      * HttpResponder constructor.
      * @param \League\Plates\Engine $engine
+     * @param \Slim\Interfaces\RouterInterface $router
      */
-    public function __construct(Engine $engine)
+    public function __construct(Engine $engine, RouterInterface $router)
     {
         $this->engine = $engine;
+        $this->router = $router;
+    }
+
+    public function redirectTo(
+      ResponseInterface $response,
+      $to,
+      array $data = [],
+      array $queryParams = [],
+      $status = 302
+    ) {
+        $url = $this->router->pathFor($to, $data, $queryParams);
+        return $response->withStatus($status)->withHeader('Location', $url);
     }
 
     public function make($template, array $data = [])
@@ -31,6 +50,7 @@ class HttpResponder
       $template,
       array $data = []
     ) {
-        return $response->getBody()->write($this->engine->render($template, $data));
+        return $response->getBody()->write($this->engine->render($template,
+          $data));
     }
 }

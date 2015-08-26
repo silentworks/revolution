@@ -50,8 +50,8 @@ class Settings
     {
         $this->erase();
         //if (empty($this->install->request) && !($this->install->request instanceof modInstallCLIRequest)) {
-            header('Location: ' . MODX_SETUP_URL . '?restarted=1');
-            exit();
+            //header('Location: ' . MODX_SETUP_URL . '?restarted=1');
+            //exit();
         //}
     }
 
