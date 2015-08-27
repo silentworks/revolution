@@ -4,67 +4,72 @@ namespace MODX\Installer;
 
 use League\Plates\Engine;
 use League\Plates\Extension\ExtensionInterface;
+use Slim\Http\Request;
+use Slim\Router;
 
 class PlatesExtension implements ExtensionInterface
 {
     /**
-     * @var \Slim\Interfaces\RouterInterface
+     * @var \Slim\Router
      */
     private $router;
 
     /**
-     * @var string|\Slim\Http\Request
+     * @var \Slim\Http\Request
      */
     private $request;
+    /**
+     * @var
+     */
+    private $basePath;
 
-    public function __construct($router, $request)
+    public function __construct(Router $router, Request $request, $basePath)
     {
         $this->router = $router;
         $this->request = $request;
+        $this->basePath = $basePath;
     }
 
-    public function pathFor($name, $data = [], $queryParams = [])
+    public function pathFor($name, $data = [])
     {
-        return $this->router->pathFor($name, $data, $queryParams);
+        return $this->basePath . $this->router->urlFor($name, $data);
     }
 
     public function rootPath()
     {
-        $uri = $this->request->getUri();
-        $scheme = $uri->getScheme();
-        $authority = $uri->getAuthority();
-
-        return ($scheme ? $scheme . '://' : '') . $authority;
+        return $this->request->getUrl();
     }
 
-    public function baseUrl()
+    public function baseUrl($withUri = true)
     {
-        if (method_exists($this->request->getUri(), 'getBaseUrl')) {
-            return $this->request->getUri()->getBaseUrl();
+        $uri = $this->request->getUrl();
+        if ($withUri) {
+            $uri .= $this->request->getRootUri();
         }
+        return $uri;
     }
 
     public function currentUrl()
     {
-        $uri = $this->request->getUri();
-        $scheme = $uri->getScheme();
-        $authority = $uri->getAuthority();
-        $basePath = $uri->getBasePath();
-        $path = ltrim($uri->getPath(), '/');
-        $query = $uri->getQuery();
-        $fragment = $uri->getFragment();
-
-        return ($scheme ? $scheme . '://' : '') . $authority . $basePath . $path . ($query ? '?' . $query : '') . ($fragment ? '#' . $fragment : '');
+        $req = $this->request;
+        $uri = $req->getUrl() . $req->getPath();
+        /*if ($withQueryString) {
+            $env = $app->environment();
+            if ($env['QUERY_STRING']) {
+                $uri .= '?' . $env['QUERY_STRING'];
+            }
+        }*/
+        return $uri;
     }
 
     public function currentPath()
     {
-        return $this->request->getUri()->getPath();
+//        return $this->request->getUrl()->getPath();
     }
 
     public function register(Engine $engine)
     {
-        $engine->registerFunction('path_for', [$this, 'pathFor']);
+        $engine->registerFunction('url_for', [$this, 'pathFor']);
         $engine->registerFunction('base_url', [$this, 'baseUrl']);
         $engine->registerFunction('current_url', [$this, 'currentUrl']);
         $engine->registerFunction('current_path', [$this, 'currentPath']);

@@ -30,9 +30,9 @@ class LanguageAction
         $this->util = $util;
     }
 
-    public function __invoke(Request $request, Response $response, $args = null)
+    public function __invoke()
     {
-        return $this->responder->render($response, 'language', [
+        return $this->responder->render('language', [
             'restarted' => false,
             'currentLang' => $_COOKIE['modx_setup_language'] ?: 'en',
             'languages' => $this->util->getAvailableLanguages()

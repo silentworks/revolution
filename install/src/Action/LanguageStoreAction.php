@@ -21,26 +21,33 @@ class LanguageStoreAction
     private $settings;
 
     /**
+     * @var \Slim\Http\Request
+     */
+    private $request;
+
+    /**
      * WelcomeAction constructor.
      * @param \MODX\Installer\HttpResponder $responder
      * @param \MODX\Installer\Services\Settings $settings
+     * @param \Slim\Http\Request $request
      */
-    public function __construct(HttpResponder $responder, Settings $settings)
+    public function __construct(HttpResponder $responder, Settings $settings, Request $request)
     {
         $this->responder = $responder;
         $this->settings = $settings;
+        $this->request = $request;
     }
 
-    public function __invoke(Request $request, Response $response, $args = null)
+    public function __invoke()
     {
-        $language = $request->getParam('language', 'en');
-        $cookiePath = preg_replace('#[/\\\\]$#', '', dirname(dirname($request->getRequestTarget())));
+        $language = $this->request->post('language', 'en');
+        $cookiePath = preg_replace('#[/\\\\]$#', '', dirname(dirname($_SERVER['REQUEST_URI'])));
         setcookie('modx_setup_language', $language, 0, $cookiePath . '/');
         /*$settings = $install->request->getConfig();
         $settings = array_merge($settings,$_POST);*/
-        $settings = $request->getParsedBody();
+        $settings = $this->request->post();
         $this->settings->store($settings);
 
-        return $this->responder->redirectTo($response, 'welcome');
+        $this->responder->redirectTo('welcome');
     }
 }

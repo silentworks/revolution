@@ -3,8 +3,9 @@
 namespace MODX\Installer;
 
 use League\Plates\Engine;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Interfaces\RouterInterface;
+use Slim\Http\Request;
+use Slim\Http\Response;
+use Slim\Router;
 
 class HttpResponder
 {
@@ -14,30 +15,46 @@ class HttpResponder
     private $engine;
 
     /**
-     * @var \Slim\Interfaces\RouterInterface
+     * @var \Slim\Router
      */
     private $router;
 
     /**
+     * @var \Slim\Http\Response
+     */
+    private $response;
+    /**
+     * @var \Slim\Http\Request
+     */
+    private $request;
+    private $basePath;
+
+    /**
      * HttpResponder constructor.
      * @param \League\Plates\Engine $engine
-     * @param \Slim\Interfaces\RouterInterface $router
+     * @param \Slim\Router $router
+     * @param \Slim\Http\Response $response
+     * @param \Slim\Http\Request $request
+     * @param $basePath
      */
-    public function __construct(Engine $engine, RouterInterface $router)
-    {
+    public function __construct(
+      Engine $engine,
+      Router $router,
+      Response $response,
+      Request $request,
+      $basePath
+    ) {
         $this->engine = $engine;
         $this->router = $router;
+        $this->response = $response;
+        $this->request = $request;
+        $this->basePath = $basePath;
     }
 
-    public function redirectTo(
-      ResponseInterface $response,
-      $to,
-      array $data = [],
-      array $queryParams = [],
-      $status = 302
-    ) {
-        $url = $this->router->pathFor($to, $data, $queryParams);
-        return $response->withStatus($status)->withHeader('Location', $url);
+    public function redirectTo($to, array $data = [], $status = 302)
+    {
+        $url = $this->basePath . $this->router->urlFor($to, $data);
+        $this->response->redirect($url, $status);
     }
 
     public function make($template, array $data = [])
@@ -45,12 +62,8 @@ class HttpResponder
         return $this->engine->render($template, $data);
     }
 
-    public function render(
-      ResponseInterface $response,
-      $template,
-      array $data = []
-    ) {
-        return $response->getBody()->write($this->engine->render($template,
-          $data));
+    public function render($template, array $data = [])
+    {
+        return $this->response->write($this->engine->render($template, $data));
     }
 }

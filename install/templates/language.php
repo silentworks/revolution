@@ -1,6 +1,6 @@
 <?php $this->layout('base');  ?>
 
-<form id="install" action="<?=$this->path_for('language.store')?>" method="post">
+<form id="install" action="<?=$this->url_for('language.store')?>" method="post">
 
     <?php if ($restarted): ?>
     <br class="clear" />

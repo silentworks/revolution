@@ -18,25 +18,31 @@ class OptionsAction
      * @var \MODX\Installer\Util
      */
     private $util;
+    /**
+     * @var \Slim\Http\Request
+     */
+    private $request;
 
     /**
      * WelcomeAction constructor.
      * @param \MODX\Installer\HttpResponder $responder
      * @param \MODX\Installer\Util $util
+     * @param \Slim\Http\Request $request
      */
-    public function __construct(HttpResponder $responder, Util $util)
+    public function __construct(HttpResponder $responder, Util $util, Request $request)
     {
         $this->responder = $responder;
         $this->util = $util;
+        $this->request = $request;
     }
 
-    public function __invoke(Request $request, Response $response, $args = null)
+    public function __invoke()
     {
-        return $this->responder->render($response, 'options', [
+        return $this->responder->render('options', [
             'installmode' => false,
             'unpacked' => 0,
             'files_exist' => 0,
-            'config_key' => $request->getParam('config_key', MODX_CONFIG_KEY),
+            'config_key' => $this->request->post('config_key', MODX_CONFIG_KEY),
             'writableError' => !$this->util->isSetupConfigWritable(),
         ]);
     }

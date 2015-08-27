@@ -1,6 +1,6 @@
 <?php $this->layout('base');  ?>
 
-<form id="welcome" action="<?=$this->path_for('welcome.store')?>" method="post">
+<form id="welcome" action="<?=$this->url_for('welcome.store')?>" method="post">
     <div>
         <h2><?=$_lang['welcome']?></h2>
         <?=$_lang['welcome_message']?>
