@@ -1,13 +1,13 @@
 <?php
 
-namespace MODX\Installer\Action;
+namespace MODX\Installer\Controllers;
 
 use MODX\Installer\HttpResponder;
 use MODX\Installer\Util;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class OptionsAction
+class OptionsController
 {
     /**
      * @var \MODX\Installer\HttpResponder
@@ -36,7 +36,7 @@ class OptionsAction
         $this->request = $request;
     }
 
-    public function __invoke()
+    public function index()
     {
         return $this->responder->render('options', [
             'installmode' => false,

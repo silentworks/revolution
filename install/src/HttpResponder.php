@@ -55,6 +55,8 @@ class HttpResponder
     {
         $url = $this->basePath . $this->router->urlFor($to, $data);
         $this->response->redirect($url, $status);
+
+        return true;
     }
 
     public function make($template, array $data = [])

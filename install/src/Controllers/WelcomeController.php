@@ -1,13 +1,13 @@
 <?php
 
-namespace MODX\Installer\Action;
+namespace MODX\Installer\Controllers;
 
 use MODX\Installer\HttpResponder;
 use MODX\Installer\Util;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-class WelcomeAction
+class WelcomeController
 {
     /**
      * @var \MODX\Installer\HttpResponder
@@ -37,11 +37,17 @@ class WelcomeAction
         $this->request = $request;
     }
 
-    public function __invoke()
+    public function index()
     {
         return $this->responder->render('welcome', [
             'config_key' => $this->request->post('config_key', MODX_CONFIG_KEY),
             'writableError' => !$this->util->isSetupConfigWritable(),
         ]);
+    }
+
+    public function store()
+    {
+        $this->util->updateSetupConfigKey($this->request->params('config_key', 'config'));
+        return $this->responder->redirectTo('options');
     }
 }

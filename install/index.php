@@ -1,6 +1,6 @@
 <?php
 
-use MODX\Installer\ActionFactory;
+use MODX\Installer\ControllerFactory;
 use MODX\Installer\Init;
 
 require 'vendor/autoload.php';
@@ -23,8 +23,8 @@ $app = new Slim\Slim([
 
 $container = $app->container;
 
-// ActionFactory
-$actionFactory = new ActionFactory($container);
+// ControllerFactory
+$controllerFactory = new ControllerFactory($container);
 
 Init::dependencies($container);
 
@@ -44,25 +44,25 @@ $engine->addData([
   'MODX_SETUP_KEY' => MODX_SETUP_KEY
 ]);
 
-$app->get('/', function () use ($actionFactory) {
-    return $actionFactory->newLanguageAction();
+$app->get('/', function () use ($controllerFactory) {
+    return $controllerFactory->newLanguageController()->index();
 })->setName('language');
-$app->post('/', function () use ($actionFactory) {
-    return $actionFactory->newLanguageStoreAction();
+$app->post('/', function () use ($controllerFactory) {
+    return $controllerFactory->newLanguageController()->store();
 })->setName('language.store');
 
-$app->get('/welcome', function () use ($actionFactory) {
-    return $actionFactory->newWelcomeAction();
+$app->get('/welcome', function () use ($controllerFactory) {
+    return $controllerFactory->newWelcomeController()->index();
 })->setName('welcome');
-$app->post('/welcome', function () use ($actionFactory) {
-    return $actionFactory->newWelcomeStoreAction();
+$app->post('/welcome', function () use ($controllerFactory) {
+    return $controllerFactory->newWelcomeController()->store();
 })->setName('welcome.store');
 
-$app->get('/options', function () use ($actionFactory) {
-    return $actionFactory->newOptionsAction();
+$app->get('/options', function () use ($controllerFactory) {
+    return $controllerFactory->newOptionsController()->index();
 })->setName('options');
 
-$app->post('/options', function () use ($actionFactory) {
+$app->post('/options', function () use ($controllerFactory) {
 
 })->setName('options.store');
 
