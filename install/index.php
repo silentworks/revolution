@@ -17,6 +17,9 @@ $app = new Slim\Slim([
     'modx' => [
       'corePath' => MODX_CORE_PATH,
       'setupPath' => MODX_SETUP_PATH,
+      'installPath' => MODX_INSTALL_PATH,
+      'setupKey' => MODX_SETUP_KEY,
+      'configKey' => MODX_CONFIG_KEY,
       'lexiconPath' => __DIR__ . '/lang/',
     ],
 ]);

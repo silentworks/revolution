@@ -47,7 +47,9 @@ class ControllerFactory
         return new OptionsController(
             $this->container->get('MODX\Installer\HttpResponder'),
             $this->container->get('MODX\Installer\Util'),
-            $this->container->get('request')
+            $this->container->get('request'),
+            $this->container->get('MODX\Installer\Services\Settings'),
+            $this->container->get('settings')['modx']
         );
     }
 }
