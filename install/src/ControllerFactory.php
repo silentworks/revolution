@@ -15,12 +15,29 @@ class ControllerFactory
     private $container;
 
     /**
+     * @var ControllerFactory
+     */
+    private static $instance = null;
+
+    /**
      * ControllerFactory constructor.
      * @param \Slim\Helper\Set $container
      */
     public function __construct(Set $container)
     {
         $this->container = $container;
+
+        if (empty(static::$instance)) {
+            static::$instance = $this;
+        }
+    }
+
+    public static function instance()
+    {
+        if (empty(static::$instance)) {
+            throw new \RuntimeException('Controller factory was not been instantiated.');
+        }
+        return static::$instance;
     }
 
     public function newLanguageController()

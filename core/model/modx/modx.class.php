@@ -470,7 +470,7 @@ class modX extends xPDO {
     private function initServicesContainer(\Aura\Di\Container $container)
     {
         $container->set('error.modErrorHandler', $container->newInstance('MODX\Handlers\ErrorHandler', [
-            'modx' => $this
+            'modx' => &$this
         ]));
 
         return $container;

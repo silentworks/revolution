@@ -52,7 +52,7 @@ class LanguageController
     {
         return $this->responder->render('language', [
           'restarted' => false,
-          'currentLang' => $_COOKIE['modx_setup_language'] ?: 'en',
+          'currentLang' => isset($_COOKIE['modx_setup_language']) ? $_COOKIE['modx_setup_language'] : 'en',
           'languages' => $this->util->getAvailableLanguages()
         ]);
     }

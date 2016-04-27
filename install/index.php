@@ -47,26 +47,49 @@ $engine->addData([
   'MODX_SETUP_KEY' => MODX_SETUP_KEY
 ]);
 
-$app->get('/', function () use ($controllerFactory) {
-    return $controllerFactory->newLanguageController()->index();
+$app->get('/', function () {
+    return ControllerFactory::instance()
+        ->newLanguageController()
+        ->index();
 })->setName('language');
-$app->post('/', function () use ($controllerFactory) {
-    return $controllerFactory->newLanguageController()->store();
+$app->post('/', function () {
+    return ControllerFactory::instance()
+        ->newLanguageController()
+        ->store();
 })->setName('language.store');
 
-$app->get('/welcome', function () use ($controllerFactory) {
-    return $controllerFactory->newWelcomeController()->index();
+$app->get('/welcome', function () {
+    return ControllerFactory::instance()
+        ->newWelcomeController()
+        ->index();
 })->setName('welcome');
-$app->post('/welcome', function () use ($controllerFactory) {
-    return $controllerFactory->newWelcomeController()->store();
+$app->post('/welcome', function () {
+    return ControllerFactory::instance()
+        ->newWelcomeController()
+        ->store();
 })->setName('welcome.store');
 
-$app->get('/options', function () use ($controllerFactory) {
-    return $controllerFactory->newOptionsController()->index();
+$app->get('/options', function () {
+    return ControllerFactory::instance()
+        ->newOptionsController()
+        ->index();
 })->setName('options');
-
-$app->post('/options', function () use ($controllerFactory) {
+$app->post('/options', function () {
 
 })->setName('options.store');
+
+$app->get('/database', function () {
+
+})->setName('database');
+$app->post('/database', function () {
+
+})->setName('database.store');
+
+$app->get('/summary', function () {
+
+})->setName('summary');
+$app->post('/summary', function () {
+
+})->setName('summary.store');
 
 $app->run();
